@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="test_detect.MainPage"
+             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="Azure"
+             Shell.FlyoutBehavior="Disabled"
+             >
+
+
+    <StackLayout Orientation="Vertical">
+
+
+        <Frame BackgroundColor="Black" CornerRadius="0">
+            <cv:CameraView x:Name="cameraView" WidthRequest="400" HeightRequest="500"
+                           CamerasLoaded="cameraView_CamerasLoaded"/>
+        </Frame>
+        
+
+        <Frame VerticalOptions="EndAndExpand" Margin="10">
+            <ScrollView>
+                <StackLayout>
+                    <Label x:Name="textView" Text="Сделайте фото" TextColor="Black" HorizontalOptions="Center" Padding="20" FontSize="20"/>
+                </StackLayout>
+            </ScrollView>
+        </Frame>
+        
+
+        <Button x:Name="btn"  ImageSource="camera.png" VerticalOptions="End" Margin="10" BackgroundColor="LightBlue"/>
+
+
+
+    </StackLayout><!--
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Frame Grid.Row="0" Padding="0" Margin="0" BackgroundColor="Black">
+            <cv:CameraView x:Name="cameraView" WidthRequest="400" HeightRequest="500"
+                           CamerasLoaded="cameraView_CamerasLoaded"/>
+        </Frame>
+        <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+            <Entry Placeholder="Введите текст" />
+            <Button Text="Сделать фото" />
+        </StackLayout>
+    </Grid>-->
+
+</ContentPage>
