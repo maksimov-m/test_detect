@@ -12,20 +12,11 @@
     <StackLayout Orientation="Vertical">
 
 
-        <Frame BackgroundColor="Black" CornerRadius="0">
-            <cv:CameraView x:Name="cameraView" WidthRequest="400" HeightRequest="500"
+        <!--<Frame x:Name="cameraBox" BackgroundColor="Azure" CornerRadius="0">-->
+            <cv:CameraView x:Name="cameraView" WidthRequest="730" HeightRequest="730"
                            CamerasLoaded="cameraView_CamerasLoaded"/>
-        </Frame>
-        
+        <!--</Frame>-->
 
-        <Frame VerticalOptions="EndAndExpand" Margin="10">
-            <ScrollView>
-                <StackLayout>
-                    <Label x:Name="textView" Text="Сделайте фото" TextColor="Black" HorizontalOptions="Center" Padding="20" FontSize="20"/>
-                </StackLayout>
-            </ScrollView>
-        </Frame>
-        
 
         <Button x:Name="btn"  ImageSource="camera.png" VerticalOptions="End" Margin="10" BackgroundColor="LightBlue"/>
 

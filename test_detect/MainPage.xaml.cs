@@ -32,7 +32,6 @@ public partial class MainPage : ContentPage
     private void cameraView_CamerasLoaded(object sender, EventArgs e)
     {
         cameraView.Camera = cameraView.Cameras.First();
-
         MainThread.BeginInvokeOnMainThread(async () =>
         {
             await cameraView.StopCameraAsync();
@@ -67,25 +66,74 @@ public partial class MainPage : ContentPage
 
     }
 
+    public class ResponseData
+    {
+        public string Image { get; set; }
+        public int[] RectangleCoords { get; set; }
+        public string[] Description{ get; set; }
+    }
+
     public async Task SendImage(string url, MultipartFormDataContent form, HttpClient client)
     {
         var response = await client.PostAsync(url, form);
 
-        string json = await response.Content.ReadAsStringAsync();
 
-        Answer values = JsonConvert.DeserializeObject<Answer>(json);
-
-        try
+        if (response.IsSuccessStatusCode)
         {
-            //await Shell.Current.DisplayAlert("Супер", $"{values.Labels[0]} {values.Score[0]}", "Ok");
-            textView.Text = $"{values.Labels.Length}  Labels = {values.Labels[0]}\nScore = {values.Score[0]}";
+            var json = await response.Content.ReadAsStringAsync();
+            var responseData = JsonConvert.DeserializeObject<ResponseData>(json);
 
+            // Преобразуем Base64-строку обратно в байты
+            var processedImageBytes = Convert.FromBase64String(responseData.Image);
+
+            
+            // Создаем изображение из байтов
+            ImageSource processedImage = ImageSource.FromStream(() => new MemoryStream(processedImageBytes));
+
+            
+            //cameraBox.IsVisible = false;
+            //photoBox.IsVisible = true;
+            //photo.Source = processedImage;
+            //Dictionary<string, ImageSource> keyValuePairs = new Dictionary<string, ImageSource> { { "Content", processedImage } };
+            
+            if (json.Length > 0 && responseData.Description.Length > 0)
+            {
+                //await Shell.Current.GoToAsync($"{nameof(ShowInfoPage)}", (IDictionary<string, object>)keyValuePairs);
+                string desc = "";
+                for (int i = 0; i < responseData.Description.Length; i++)
+                {
+                    desc += responseData.Description[i] + "\n";
+                }
+                await Navigation.PushAsync(new ShowInfoPage(processedImage, desc), animated:true);
+            }
+            else
+                await Shell.Current.DisplayAlert("Супер", $"Ничего не найдено", "Ok");
+            //textView.Text = "Ничего не найдено";
         }
-        catch
+        else
         {
             await Shell.Current.DisplayAlert("Супер", $"Ничего не найдено", "Ok");
-            textView.Text = "Ничего не найдено";
+            //textView.Text = "Ничего не найдено";
         }
+        //Answer values = JsonConvert.DeserializeObject<Answer>(json);
+
+        //try
+        //{
+        //    //await Shell.Current.DisplayAlert("Супер", $"{values.Labels[0]} {values.Score[0]}", "Ok");
+        //    string answ = "";
+        //    for(int i = 0; i < values.Labels.Length; i++)
+        //    {
+        //        answ = answ + $"Деталь {i + 1}: {values.Labels[i]}\n";
+        //    }
+
+        //    textView.Text = $"{answ}";
+
+        //}
+        //catch
+        //{
+        //    await Shell.Current.DisplayAlert("Супер", $"Ничего не найдено", "Ok");
+        //    textView.Text = "Ничего не найдено";
+        //}
     }
 
 }
